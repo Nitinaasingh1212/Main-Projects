@@ -152,23 +152,6 @@ const Login = ({ handleLogin, handleSignUpAdmin, handleSignUpUser }) => {
                 {/* ========================================================================= */}
                 {authMode === 'signin' && (
                     <div>
-                        {/* Role Structure Badge */}
-                        <div className="mb-5 p-3 rounded-2xl bg-sky-50/70 border border-sky-100 flex items-center justify-around text-center text-xs">
-                            <div>
-                                <span className="block font-extrabold text-amber-600">👑 MAIN ADMIN</span>
-                                <span className="text-[10px] text-slate-400">Total Control</span>
-                            </div>
-                            <span className="text-slate-300">→</span>
-                            <div>
-                                <span className="block font-extrabold text-purple-600">🛡️ SEC ADMIN</span>
-                                <span className="text-[10px] text-slate-400">Max 2 Scope</span>
-                            </div>
-                            <span className="text-slate-300">→</span>
-                            <div>
-                                <span className="block font-extrabold text-[#0084ff]">👤 USERS</span>
-                                <span className="text-[10px] text-slate-400">Private Tasks</span>
-                            </div>
-                        </div>
 
                         {/* Sign In Form */}
                         <form onSubmit={onLoginSubmit} className="flex flex-col space-y-4">
