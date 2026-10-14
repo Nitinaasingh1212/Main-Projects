@@ -1281,20 +1281,56 @@ export const addTaskComment = (taskId, authorName, authorRole, text) => {
 };
 
 // Attachment management
-export const addTaskAttachment = (taskId, name, size, uploadedBy) => {
+export const addTaskAttachment = (taskId, attachmentOrName, size, uploadedBy) => {
     initializeTeamWorkStorage();
     const tasks = getAllTasks();
-    const newAtt = {
-        id: `att-${Date.now()}`,
-        name,
-        size: size || '1.2 MB',
-        uploadedBy: uploadedBy || 'Team Member',
-        date: new Date().toISOString().split('T')[0],
-        url: '#'
-    };
+    let newAtt;
+    if (typeof attachmentOrName === 'object' && attachmentOrName !== null) {
+        newAtt = {
+            id: attachmentOrName.id || `att-${Date.now()}`,
+            name: attachmentOrName.name || 'Untitled File',
+            size: attachmentOrName.size || '1.2 MB',
+            sizeBytes: attachmentOrName.sizeBytes,
+            mimeType: attachmentOrName.mimeType || 'application/octet-stream',
+            category: attachmentOrName.category || 'file',
+            uploadedBy: attachmentOrName.uploadedBy || uploadedBy || 'Team Member',
+            date: attachmentOrName.date || new Date().toISOString().split('T')[0],
+            url: attachmentOrName.url || '#'
+        };
+    } else {
+        newAtt = {
+            id: `att-${Date.now()}`,
+            name: attachmentOrName,
+            size: size || '1.2 MB',
+            uploadedBy: uploadedBy || 'Team Member',
+            date: new Date().toISOString().split('T')[0],
+            url: '#'
+        };
+    }
+
     const updated = tasks.map(t => {
         if (t.id === taskId) {
             return { ...t, attachments: [...(t.attachments || []), newAtt] };
+        }
+        return t;
+    });
+    saveToStorage(STORAGE_KEYS.TASKS, updated);
+    const updatedTask = updated.find(t => t.id === taskId);
+    if (updatedTask) {
+        fsUpdateDoc(FIRESTORE_COLLECTIONS.TASKS, taskId, { attachments: updatedTask.attachments });
+    }
+    return updated;
+};
+
+export const deleteTaskAttachment = (taskId, attachmentId) => {
+    initializeTeamWorkStorage();
+    const tasks = getAllTasks();
+    const updated = tasks.map(t => {
+        if (t.id === taskId) {
+            return {
+                ...t,
+                attachments: (t.attachments || []).filter(a => a.id !== attachmentId)
+            };
         }
         return t;
     });

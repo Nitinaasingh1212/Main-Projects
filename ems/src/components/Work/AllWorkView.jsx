@@ -341,6 +341,22 @@ const AllWorkView = ({
                                                     {task.description}
                                                 </p>
 
+                                                {/* Attachments Indicator */}
+                                                {task.attachments && task.attachments.length > 0 && (
+                                                    <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+                                                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 flex items-center gap-1">
+                                                            <span>📎</span>
+                                                            <span>{task.attachments.length}</span>
+                                                        </span>
+                                                        {task.attachments.some(a => a.category === 'video' || a.mimeType?.startsWith('video/') || a.name?.endsWith('.mp4') || a.name?.endsWith('.webm') || a.name?.endsWith('.mov')) && (
+                                                            <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 border border-purple-200 flex items-center gap-0.5">
+                                                                <span>🎬</span>
+                                                                <span>Video</span>
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                )}
+
                                                 {/* Member / Assignee badge (Admin view) */}
                                                 {isAdmin && (
                                                     <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
@@ -424,7 +440,20 @@ const AllWorkView = ({
                                         className="hover:bg-slate-50/80 transition-colors cursor-pointer group"
                                     >
                                         <td className="py-3.5 px-4">
-                                            <div className="font-bold text-slate-900 group-hover:text-[#0084ff] transition-colors">{task.title}</div>
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <span className="font-bold text-slate-900 group-hover:text-[#0084ff] transition-colors">{task.title}</span>
+                                                {task.attachments && task.attachments.length > 0 && (
+                                                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 flex items-center gap-0.5">
+                                                        <span>📎</span>
+                                                        <span>{task.attachments.length}</span>
+                                                    </span>
+                                                )}
+                                                {task.attachments?.some(a => a.category === 'video' || a.mimeType?.startsWith('video/') || a.name?.endsWith('.mp4') || a.name?.endsWith('.webm') || a.name?.endsWith('.mov')) && (
+                                                    <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 border border-purple-200">
+                                                        🎬 Video
+                                                    </span>
+                                                )}
+                                            </div>
                                             <div className="text-[11px] text-slate-400 line-clamp-1">{task.description}</div>
                                         </td>
                                         {isAdmin && (

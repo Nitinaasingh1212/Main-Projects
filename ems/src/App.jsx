@@ -31,6 +31,7 @@ import {
     addTaskChecklistItem,
     addTaskComment,
     addTaskAttachment,
+    deleteTaskAttachment,
     addUser,
     updateUser,
     toggleUserStatus,
@@ -220,9 +221,15 @@ const App = () => {
         refreshData();
     };
 
-    const handleAddAttachment = (taskId, name, size, uploadedBy) => {
-        addTaskAttachment(taskId, name, size, uploadedBy);
+    const handleAddAttachment = (taskId, attachmentOrName, size, uploadedBy) => {
+        addTaskAttachment(taskId, attachmentOrName, size, uploadedBy);
         refreshData();
+    };
+
+    const handleDeleteAttachment = (taskId, attachmentId) => {
+        deleteTaskAttachment(taskId, attachmentId);
+        refreshData();
+        showToast('Attachment removed.');
     };
 
     // User management
@@ -467,6 +474,7 @@ const App = () => {
                     onAddChecklistItem={handleAddChecklistItem}
                     onAddComment={handleAddComment}
                     onAddAttachment={handleAddAttachment}
+                    onDeleteAttachment={handleDeleteAttachment}
                     onDeleteTask={handleDeleteTask}
                 />
             )}
